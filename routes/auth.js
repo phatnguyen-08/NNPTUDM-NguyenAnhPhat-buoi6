@@ -54,6 +54,21 @@ router.post('/logout', checkLogin, function (req, res, next) {
   res.send("logout")
 })
 
+router.put('/change-password', checkLogin, async function (req, res, next) {
+  try {
+    let { oldPassword, newPassword } = req.body;
+    if (!oldPassword || !newPassword) {
+      return res.status(400).send({
+        message: "oldPassword va newPassword khong duoc de trong"
+      })
+    }
+    await userController.ChangePassword(req.userId, oldPassword, newPassword);
+    res.send({ message: "Doi mat khau thanh cong" })
+  } catch (error) {
+    res.status(400).send({ message: error.message })
+  }
+})
+
 
 module.exports = router;
 
